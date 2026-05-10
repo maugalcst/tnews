@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "2501gAWQ4qg=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\mauri\\OneDrive\\Desktop\\workshop\\backend\\tnews\\NewsIntelligence.API\\NewsIntelligente.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\mauri\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.2\\microsoft.aspnetcore.openapi.10.0.2.nupkg.sha512",
+    "C:\\Users\\mauri\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

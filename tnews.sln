@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewsIntelligence.API", "NewsIntelligence.API", "{85E3E554-BF1E-E0DD-D152-8121C7CF3666}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsIntelligente.API", "NewsIntelligence.API\NewsIntelligente.API.csproj", "{7EE0BDC1-0871-3A96-0910-20D2D2A68D10}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7EE0BDC1-0871-3A96-0910-20D2D2A68D10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EE0BDC1-0871-3A96-0910-20D2D2A68D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EE0BDC1-0871-3A96-0910-20D2D2A68D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EE0BDC1-0871-3A96-0910-20D2D2A68D10}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{7EE0BDC1-0871-3A96-0910-20D2D2A68D10} = {85E3E554-BF1E-E0DD-D152-8121C7CF3666}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3873661F-3E35-4E7D-BB8C-E21E0B7C0A65}
+	EndGlobalSection
+EndGlobal
