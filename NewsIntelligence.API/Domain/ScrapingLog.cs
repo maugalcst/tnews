@@ -29,7 +29,5 @@ namespace NewsIntelligente.API.Domain
             SourceId = sourceId;
         } 
 
-
-
     }
 }
