@@ -9,7 +9,7 @@ namespace NewsIntelligente.API.Infrastructure
         public DbSet<Source> Sources { get; set; }
         public DbSet<ScrapingLog> ScrapingLogs { get; set; }
 
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        public AppDbContext(DbContextOptions options) : base(options)
         {
         }
         
