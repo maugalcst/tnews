@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using NewsIntelligence.API.Domain;
 using NewsIntelligence.API.Features;
 using NewsIntelligence.API.Infrastructure;
@@ -25,6 +26,19 @@ namespace NewsIntelligence.API.Features.Sources
             await _context.SaveChangesAsync();
             
             return source.Id;
+        }
+
+        public async Task<List<SourceDto>> GetSourcesAsync()
+        {
+            return await _context.Sources
+                .Select(source => new SourceDto(
+                    source.Id,
+                    source.Name,
+                    source.Url,
+                    source.Category,
+                    source.IsActive
+                ))
+                .ToListAsync();
         }
     }
 }

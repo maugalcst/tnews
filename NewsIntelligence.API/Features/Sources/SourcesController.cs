@@ -21,5 +21,12 @@ namespace NewsIntelligence.API.Features.Sources
             return Ok(sourceId);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> GetSources()
+        {
+            List<SourceDto> sources = await _sourceService.GetSourcesAsync();
+            return Ok(sources);
+        }
+
     }
 }
