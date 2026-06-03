@@ -1,5 +1,6 @@
-using NewsIntelligente.API.Domain;
-using NewsIntelligente.API.Infrastructure;
+using NewsIntelligence.API.Domain;
+using NewsIntelligence.API.Features;
+using NewsIntelligence.API.Infrastructure;
 
 namespace NewsIntelligence.API.Features.Sources
 {
@@ -10,6 +11,20 @@ namespace NewsIntelligence.API.Features.Sources
         public SourceService(AppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<Guid> CreateSourceAsync(CreateSourceDto dto)
+        {
+            var source = new Source(
+                name: dto.Name,
+                url: dto.Url,
+                category: dto.Category
+            );
+
+            _context.Sources.Add(source);
+            await _context.SaveChangesAsync();
+            
+            return source.Id;
         }
     }
 }

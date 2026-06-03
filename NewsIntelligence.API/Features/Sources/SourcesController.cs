@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using NewsIntelligence.API.Features.Sources;
-using NewsIntelligente.API.Domain;
+using NewsIntelligence.API.Domain;
 
-namespace NewsIntelligente.API.Features.Sources
+namespace NewsIntelligence.API.Features.Sources
 {
     [ApiController]
     [Route("api/sources")]

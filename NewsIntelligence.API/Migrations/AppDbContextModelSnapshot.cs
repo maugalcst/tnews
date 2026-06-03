@@ -3,12 +3,12 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using NewsIntelligente.API.Infrastructure;
+using NewsIntelligence.API.Infrastructure;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace NewsIntelligente.API.Migrations
+namespace NewsIntelligence.API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace NewsIntelligente.API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("NewsIntelligente.API.Domain.Article", b =>
+            modelBuilder.Entity("NewsIntelligence.API.Domain.Article", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -64,7 +64,7 @@ namespace NewsIntelligente.API.Migrations
                     b.ToTable("Articles");
                 });
 
-            modelBuilder.Entity("NewsIntelligente.API.Domain.ScrapingLog", b =>
+            modelBuilder.Entity("NewsIntelligence.API.Domain.ScrapingLog", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -91,7 +91,7 @@ namespace NewsIntelligente.API.Migrations
                     b.ToTable("ScrapingLogs");
                 });
 
-            modelBuilder.Entity("NewsIntelligente.API.Domain.Source", b =>
+            modelBuilder.Entity("NewsIntelligence.API.Domain.Source", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -117,9 +117,9 @@ namespace NewsIntelligente.API.Migrations
                     b.ToTable("Sources");
                 });
 
-            modelBuilder.Entity("NewsIntelligente.API.Domain.Article", b =>
+            modelBuilder.Entity("NewsIntelligence.API.Domain.Article", b =>
                 {
-                    b.HasOne("NewsIntelligente.API.Domain.Source", "Source")
+                    b.HasOne("NewsIntelligence.API.Domain.Source", "Source")
                         .WithMany("Articles")
                         .HasForeignKey("SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -128,7 +128,7 @@ namespace NewsIntelligente.API.Migrations
                     b.Navigation("Source");
                 });
 
-            modelBuilder.Entity("NewsIntelligente.API.Domain.Source", b =>
+            modelBuilder.Entity("NewsIntelligence.API.Domain.Source", b =>
                 {
                     b.Navigation("Articles");
                 });

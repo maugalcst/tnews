@@ -877,15 +877,15 @@
           }
         }
       },
-      "Scalar.AspNetCore/2.14.11": {
+      "Scalar.AspNetCore/2.0.14": {
         "type": "package",
         "compile": {
-          "lib/net10.0/Scalar.AspNetCore.dll": {
+          "lib/net9.0/Scalar.AspNetCore.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net10.0/Scalar.AspNetCore.dll": {
+          "lib/net9.0/Scalar.AspNetCore.dll": {
             "related": ".xml"
           }
         },
@@ -2902,22 +2902,20 @@
         "postgresql.png"
       ]
     },
-    "Scalar.AspNetCore/2.14.11": {
-      "sha512": "EthfC0++GjWX5JB84OUTsNlzRMr8v6zGinx8i2msKWitAkvGbvjBz7ET9XoUis4Z3M+iH6jIJ66uUGzZqmrSGg==",
+    "Scalar.AspNetCore/2.0.14": {
+      "sha512": "e4pXyxXpoHNPTPHTWjYLgIzilpbSYFNOqb8URMaP0vxMMKKB0Qn2FuBq1JQLW0hEPdZliW0WOYLOxczwOVHMhQ==",
       "type": "package",
-      "path": "scalar.aspnetcore/2.14.11",
+      "path": "scalar.aspnetcore/2.0.14",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "icon.png",
-        "lib/net10.0/Scalar.AspNetCore.dll",
-        "lib/net10.0/Scalar.AspNetCore.xml",
         "lib/net8.0/Scalar.AspNetCore.dll",
         "lib/net8.0/Scalar.AspNetCore.xml",
         "lib/net9.0/Scalar.AspNetCore.dll",
         "lib/net9.0/Scalar.AspNetCore.xml",
-        "scalar.aspnetcore.2.14.11.nupkg.sha512",
+        "scalar.aspnetcore.2.0.14.nupkg.sha512",
         "scalar.aspnetcore.nuspec"
       ]
     },
@@ -3115,7 +3113,7 @@
       "Microsoft.AspNetCore.OpenApi >= 10.0.2",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.7",
       "Npgsql.EntityFrameworkCore.PostgreSQL >= 10.0.0",
-      "Scalar.AspNetCore >= 2.14.11"
+      "Scalar.AspNetCore >= 2.0.14"
     ]
   },
   "packageFolders": {
@@ -3124,9 +3122,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/mau/workbench/coding/tnews/NewsIntelligence.API/NewsIntelligente.API.csproj",
-      "projectName": "NewsIntelligente.API",
-      "projectPath": "/home/mau/workbench/coding/tnews/NewsIntelligence.API/NewsIntelligente.API.csproj",
+      "projectUniqueName": "/home/mau/workbench/coding/tnews/NewsIntelligence.API/NewsIntelligence.API.csproj",
+      "projectName": "NewsIntelligence.API",
+      "projectPath": "/home/mau/workbench/coding/tnews/NewsIntelligence.API/NewsIntelligence.API.csproj",
       "packagesPath": "/home/mau/.nuget/packages/",
       "outputPath": "/home/mau/workbench/coding/tnews/NewsIntelligence.API/obj/",
       "projectStyle": "PackageReference",
@@ -3185,7 +3183,7 @@
           },
           "Scalar.AspNetCore": {
             "target": "Package",
-            "version": "[2.14.11, )"
+            "version": "[2.0.14, )"
           }
         },
         "imports": [

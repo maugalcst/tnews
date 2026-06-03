@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace NewsIntelligente.API.Migrations
+namespace NewsIntelligence.API.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

@@ -1,4 +1,4 @@
-namespace NewsIntelligente.API.Features.Sources
+namespace NewsIntelligence.API.Features.Sources
 {
     public record CreateSourceDto(
         string Name,

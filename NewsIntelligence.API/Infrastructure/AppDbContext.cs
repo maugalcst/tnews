@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using NewsIntelligente.API.Domain;
+using NewsIntelligence.API.Domain;
 
-namespace NewsIntelligente.API.Infrastructure
+namespace NewsIntelligence.API.Infrastructure
 {
     public class AppDbContext : DbContext
     {

@@ -1,4 +1,4 @@
-namespace NewsIntelligente.API.Domain
+namespace NewsIntelligence.API.Domain
 {
     public class ScrapingLog
     {
