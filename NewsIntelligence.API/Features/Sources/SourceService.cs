@@ -19,7 +19,9 @@ namespace NewsIntelligence.API.Features.Sources
             var source = new Source(
                 name: dto.Name,
                 url: dto.Url,
-                category: dto.Category
+                category: dto.Category,
+                xPathTitle: dto.XPathTitle,
+                xPathContent: dto.XPathContent
             );
 
             _context.Sources.Add(source);
