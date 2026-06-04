@@ -9,13 +9,12 @@ namespace NewsIntelligence.API.Domain
         public string Url { get; set; }
         public string Category { get; set; }
         public DateTimeOffset PublishedDate { get; set; }
-        public Source Source { get; private set; }
+        public Source Source { get; private set; } = null!;
         public Guid SourceId { get; private set; }
         public DateTimeOffset ScrapedDate { get; private set; }
 
         private Article() {}
-
-        public Article(string title, string author, string content, string url, string category, DateTimeOffset publishedDate, Source source, Guid sourceId)
+        public Article(string title, string author, string content, string url, string category, DateTimeOffset publishedDate, Guid sourceId)
         {
             if (string.IsNullOrEmpty(title))
                 throw new ArgumentNullException("title");
@@ -39,10 +38,8 @@ namespace NewsIntelligence.API.Domain
             Url = url;
             Category = category;
             PublishedDate = publishedDate;
-            Source = source;
             SourceId = sourceId;
             ScrapedDate = DateTimeOffset.UtcNow;
         }
-
     }
 }
