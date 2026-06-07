@@ -5,6 +5,7 @@ namespace NewsIntelligence.API.Features.Sources
         string Url,
         string Category,
         string XPathTitle,
-        string XPathContent
+        string XPathContent,
+        string XPathContainer
     );
 }

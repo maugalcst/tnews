@@ -1,3 +1,4 @@
+using System.Net;
 using Microsoft.AspNetCore.Mvc;
 using NewsIntelligence.API.Infrastructure;
 
@@ -26,6 +27,13 @@ namespace NewsIntelligence.API.Features.Scraper
         {
             var scrapedArticles = await _scraperService.GetScrapedArticlesAsync();
             return Ok(scrapedArticles);
+        }
+
+        [HttpGet("logs")]
+        public async Task<IActionResult> GetScrapedLogs()
+        {
+            var scraperLogs = await _scraperService.GetScraperLogsAsync();
+            return Ok(scraperLogs);
         }
 
     }

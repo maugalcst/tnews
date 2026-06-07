@@ -4,14 +4,14 @@ namespace NewsIntelligence.API.Domain
     {
         public Guid Id { get; set; }
         public DateTimeOffset ExecutedAt { get; set; } = DateTimeOffset.UtcNow;
-        public string Status { get; set; }
-        public int DurationMs { get; set; }
+        public string Status { get; set; } = null!;
+        public long DurationMs { get; set; }
         public int ArticlesFound { get; set; }
         public Guid SourceId { get; set; }
 
         private ScrapingLog() {}
 
-        public ScrapingLog(string status, int durationMs, int articlesFound, Guid sourceId)
+        public ScrapingLog(string status, long durationMs, int articlesFound, Guid sourceId)
         {
             if (string.IsNullOrEmpty(status))
                 throw new ArgumentNullException(nameof(status));

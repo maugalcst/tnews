@@ -7,8 +7,9 @@ namespace NewsIntelligence.API.Domain
         public string Url { get; set; } = null!;
         public string Category { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-        public string XPathTItle { get; set; } = null!;
+        public string XPathTitle { get; set; } = null!;
         public string XPathContent { get; set; } = null!;
+        public string XPathContainer { get; set; } = null!;
 
         public List<Article> Articles{ get; set; } = new();
 
@@ -36,7 +37,7 @@ namespace NewsIntelligence.API.Domain
             Name = name;
             Url = url;
             Category = category;
-            XPathTItle = xPathTitle;
+            XPathTitle = xPathTitle;
             XPathContent = xPathContent;
         }
 
