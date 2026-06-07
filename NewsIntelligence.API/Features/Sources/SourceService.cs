@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NewsIntelligence.API.Domain;
 using NewsIntelligence.API.Features;
 using NewsIntelligence.API.Infrastructure;
+using NewsIntelligence.API.Migrations;
 
 namespace NewsIntelligence.API.Features.Sources
 {
@@ -21,7 +22,8 @@ namespace NewsIntelligence.API.Features.Sources
                 url: dto.Url,
                 category: dto.Category,
                 xPathTitle: dto.XPathTitle,
-                xPathContent: dto.XPathContent
+                xPathContent: dto.XPathContent,
+                xPathContainer: dto.XPathContainer
             );
 
             _context.Sources.Add(source);

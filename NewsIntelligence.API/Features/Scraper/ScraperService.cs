@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using System.Text;
 using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using NewsIntelligence.API.Domain;
 using NewsIntelligence.API.Infrastructure;
 
@@ -36,36 +38,50 @@ namespace NewsIntelligence.API.Features.Scraper
                     System.Console.WriteLine($"[SCRAPER] Initializing download of: {source.Name} ({source.Url})...");
                     HtmlDocument doc = await web.LoadFromWebAsync(source.Url);
 
-                    var titleNodes = doc.DocumentNode.SelectNodes(source.XPathTitle);
-                    var contentNodes = doc.DocumentNode.SelectNodes(source.XPathContent);
+                    var articlesCards = doc.DocumentNode.SelectNodes(source.XPathContainer);
 
-                    if (titleNodes == null || contentNodes == null)
+                    if (articlesCards == null)
+                        throw new Exception($"Couldn't find cards with the specific container for {source.Name}.");
+
+                    int successfulArticlesInThisSource = 0;
+
+                    foreach (var card in articlesCards)
                     {
-                        throw new Exception($"The XPATH selectors didn't match with the current {source.Name} HTML");
-                    }
+                        var titleLinkNode = card.SelectSingleNode(source.XPathTitle);
 
-                    articlesCount = Math.Min(titleNodes.Count, contentNodes.Count);
+                        if (titleLinkNode == null) continue;
 
-                    for (int i = 0; i < articlesCount; i++)
-                    {
-                        string articleTitle = titleNodes[i].InnerText.Trim();
-                        string articleContent = contentNodes[i].InnerText.Trim();
+                        string articleTitle = titleLinkNode.InnerText.Trim();
+
+                        string articleUrl = titleLinkNode.GetAttributeValue("href", string.Empty);
+
+                        if (string.IsNullOrEmpty(articleUrl)) continue;
+
+                        if (!articleUrl.StartsWith("http"))
+                        {
+                            articleUrl = $"https://www.{source.Name.ToLower()}.com" + articleUrl;
+                        }
+
+                        string articleContent = await GetArticleTextAsync(web, articleUrl, source.XPathContent);
+                        //pendiente de resumen con IA
 
                         var article = new Article(
                             title: articleTitle,
-                            author: "Scraper Bot",
+                            author: "Scraper bot",
                             content: articleContent,
-                            url: source.Url,
+                            url: articleUrl,
                             category: source.Category,
-                            publishedDate: DateTimeOffset.UtcNow,
+                            publishedDate: DateTimeOffset.UtcNow, //revisar después
                             sourceId: source.Id
                         );
 
-                        _context.Articles.Add(article);
+                        _context.Add(article);
+                        successfulArticlesInThisSource++;
+
+                        System.Console.WriteLine($"[SCRAPER] Processed card: \"{articleTitle}\" -> {articleUrl}");
                     }
 
-                    System.Console.WriteLine($"[SCRAPER] Success! Extracted {articlesCount} articles from {source.Name}!");
-
+                    articlesCount = successfulArticlesInThisSource;
                     status = "Success";
 
                 } 
@@ -86,7 +102,6 @@ namespace NewsIntelligence.API.Features.Scraper
                 }
             }
 
-            await _context.SaveChangesAsync();
             System.Console.WriteLine($"[SCRAPER] Massive execution finalized.");
         }
 
@@ -97,6 +112,7 @@ namespace NewsIntelligence.API.Features.Scraper
                     article.Id,
                     article.Title,
                     article.Content,
+                    article.Url,
                     article.ScrapedDate
                 ))
                 .ToListAsync();
@@ -105,6 +121,36 @@ namespace NewsIntelligence.API.Features.Scraper
         public async Task<List<ScrapingLog>> GetScraperLogsAsync()
         {
             return await _context.ScrapingLogs.AsNoTracking().ToListAsync();
+        }
+
+        private async Task<string> GetArticleTextAsync(HtmlWeb web, string articleUrl, string xpathContent)
+        {
+            try
+            {
+                HtmlDocument doc = await web.LoadFromWebAsync(articleUrl);
+                var contentFound = doc.DocumentNode.SelectNodes(xpathContent);
+
+                if (contentFound == null) return "Content not available for extraction.";
+                
+                StringBuilder contentBuilder = new StringBuilder();
+
+                foreach (var p in contentFound)
+                {
+                    var paragraph = p.InnerText.Trim();
+                    if (string.IsNullOrEmpty(paragraph)) continue;
+
+                    contentBuilder.AppendLine(paragraph);
+                }
+
+                string content = contentBuilder.ToString();
+                return content;
+
+            }
+            catch (Exception e)
+            {
+                System.Console.WriteLine($"[WARNING] Error leyendo artículo: {e.Message}");
+                return "Error al extraer el contenido completo.";
+            }
         }
 
     }    

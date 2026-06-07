@@ -4,6 +4,7 @@ namespace NewsIntelligence.API.Features.Scraper
         Guid Id,
         string Title,
         string Content,
+        string Url,
         DateTimeOffset ScrapedDate
     );
 }

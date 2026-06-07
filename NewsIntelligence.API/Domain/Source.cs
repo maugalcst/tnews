@@ -16,7 +16,7 @@ namespace NewsIntelligence.API.Domain
 
         private Source() {}
 
-        public Source(string name, string url, string category, string xPathTitle, string xPathContent)
+        public Source(string name, string url, string category, string xPathTitle, string xPathContent, string xPathContainer)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("name");
@@ -33,12 +33,16 @@ namespace NewsIntelligence.API.Domain
             if (string.IsNullOrEmpty(xPathContent))
                 throw new ArgumentNullException("xPathContent");
 
+            if (string.IsNullOrEmpty(xPathContainer))
+                throw new ArgumentNullException("xPathContainer");
+
             Id = Guid.NewGuid();
             Name = name;
             Url = url;
             Category = category;
             XPathTitle = xPathTitle;
             XPathContent = xPathContent;
+            XPathContainer = xPathContainer;
         }
 
         public void Activate() => IsActive = true;
