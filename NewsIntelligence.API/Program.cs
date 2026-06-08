@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using NewsIntelligence.API.Features.AI;
 using NewsIntelligence.API.Features.Scraper;
 using NewsIntelligence.API.Features.Sources;
 using NewsIntelligence.API.Infrastructure;
@@ -11,6 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 builder.Services.AddScoped<SourceService>();
 builder.Services.AddScoped<ScraperService>();
+builder.Services.AddScoped<AIService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 

@@ -4,6 +4,7 @@ using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 using NewsIntelligence.API.Domain;
+using NewsIntelligence.API.Features.AI;
 using NewsIntelligence.API.Infrastructure;
 
 namespace NewsIntelligence.API.Features.Scraper
@@ -11,10 +12,12 @@ namespace NewsIntelligence.API.Features.Scraper
     public class ScraperService
     {
         private readonly AppDbContext _context;
+        private readonly AIService _aiService;
 
-        public ScraperService(AppDbContext context)
+        public ScraperService(AppDbContext context, AIService aiService)
         {
             _context = context;
+            _aiService = aiService;
         }
 
         public async Task<List<Source>> GetActiveSourcesAsync()
@@ -62,8 +65,15 @@ namespace NewsIntelligence.API.Features.Scraper
                             articleUrl = $"https://www.{source.Name.ToLower()}.com" + articleUrl;
                         }
 
-                        string articleContent = await GetArticleTextAsync(web, articleUrl, source.XPathContent);
-                        //pendiente de resumen con IA
+                        bool articleUrlExist = await _context.Articles.AnyAsync(a => a.Url == articleUrl);
+
+                        if (articleUrlExist) continue;
+
+                        string articleTextRaw = await GetArticleTextAsync(web, articleUrl, source.XPathContent);
+                        
+                        if (articleTextRaw.Length < 100) continue;
+
+                        string articleContent = await _aiService.GenerateSummaryAsync(articleTextRaw);
 
                         var article = new Article(
                             title: articleTitle,
@@ -71,7 +81,7 @@ namespace NewsIntelligence.API.Features.Scraper
                             content: articleContent,
                             url: articleUrl,
                             category: source.Category,
-                            publishedDate: DateTimeOffset.UtcNow, //revisar después
+                            publishedDate: DateTimeOffset.UtcNow,
                             sourceId: source.Id
                         );
 
