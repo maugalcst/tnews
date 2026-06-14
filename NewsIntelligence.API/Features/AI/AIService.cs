@@ -24,7 +24,25 @@ namespace NewsIntelligence.API.Features.AI
 
         public async Task<string> GenerateSummaryAsync(string articleText)
         {
-            string summaryPrompt = $"You are an AI agent specialized in creating highly accurate news summaries. Your only objective is to read the provided article and extract the most critical information in a 100% impartial and objective manner. STRICT RULES: The summary must be in English. The maximum length must be exactly 2 sentences (maximum 40 words). DO NOT include greetings, introductions such as 'Here is the summary', or closing remarks. Return ONLY AND EXCLUSIVELY the summary text. This is the article you will summarize: {articleText}";
+            string summaryPrompt = $"""
+            You are an AI agent specialized in creating highly accurate news summaries. 
+            Your only objective is to read the provided article and extract the most critical information in a 100% impartial and objective manner. 
+            STRICT RULES: The summary must be in English. The maximum length must be exactly 2 sentences (maximum 40 words). 
+            Return ONLY AND EXCLUSIVELY the summary text. An example of the transformation of the information would be:
+
+            ----------------------------
+            ## Article to summarize ##
+            GlobalTech Inc. announced today the release of their new quantum processor, the QX-100, during their annual summit in Tokyo. The CEO stated this chip is 50 times faster than current models and will revolutionize cloud computing. It will be available for enterprise customers starting next November for $5,000 per unit.
+
+            ## AI summary ##
+            GlobalTech Inc. unveiled the QX-100 quantum processor in Tokyo, which promises speeds 50 times faster than current models. The chip will be available to enterprise customers next November for $5,000.
+            ----------------------------
+
+            ## Article to summarize ##
+            {articleText}
+
+            ## AI summary ##
+            """;
 
             var requestData = new OllamaRequest("llama3", summaryPrompt, false);
 
