@@ -13,6 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connect
 builder.Services.AddScoped<SourceService>();
 builder.Services.AddScoped<ScraperService>();
 builder.Services.AddScoped<AIService>();
+builder.Services.AddHttpClient<AIService>();
 builder.Services.AddHostedService<ScraperBackgroundService>();
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();

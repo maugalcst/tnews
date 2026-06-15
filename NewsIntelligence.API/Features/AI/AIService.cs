@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using NewsIntelligence.API.Infrastructure;
 
 namespace NewsIntelligence.API.Features.AI
@@ -16,10 +17,13 @@ namespace NewsIntelligence.API.Features.AI
     public class AIService
     {
         private readonly AppDbContext _context;
+        private readonly HttpClient _client;
 
-        public AIService(AppDbContext context)
+        public AIService(AppDbContext context, HttpClient client)
         {
             _context = context;
+            _client = client;
+            _client.Timeout = TimeSpan.FromMinutes(10);
         }
 
         public async Task<string> GenerateSummaryAsync(string articleText)
@@ -45,27 +49,24 @@ namespace NewsIntelligence.API.Features.AI
             """;
 
             var requestData = new OllamaRequest("llama3", summaryPrompt, false);
-
             string jsonContent = JsonSerializer.Serialize(requestData);
-
             var httpContent = new StringContent(jsonContent, System.Text.Encoding.UTF8, "application/json");
 
-            using var client = new HttpClient();
-
-            client.Timeout = TimeSpan.FromMinutes(10);
-
-            var response = await client.PostAsync("http://localhost:11434/api/generate", httpContent);
-
+            var response = await _client.PostAsync("http://localhost:11434/api/generate", httpContent);
             string responseStringJson = await response.Content.ReadAsStringAsync();
 
             if (string.IsNullOrEmpty(responseStringJson))
-                throw new ArgumentNullException(responseStringJson);
+                throw new ArgumentNullException(nameof(responseStringJson));
                 
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            
-            OllamaResponse responseObj = JsonSerializer.Deserialize<OllamaResponse>(responseStringJson, options);
+            OllamaResponse? responseObj = JsonSerializer.Deserialize<OllamaResponse>(responseStringJson, options);
 
-            return responseObj.Response;
+            if (responseObj?.Response is null)
+                throw new InvalidOperationException("Invalid response from AI service.");
+
+            var cleanResponse = Regex.Replace(responseObj.Response, @"^(Here is.*?summary:?\s*|Summary:?\s*)", "", RegexOptions.IgnoreCase).Trim();
+
+            return cleanResponse;
 
         }
     }
