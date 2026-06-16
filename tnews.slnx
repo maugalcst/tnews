@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="NewsIntelligence.API/NewsIntelligence.API.csproj" />
+  <Project Path="NewsIntelligence.TUI/NewsIntelligence.TUI.csproj" />
 </Solution>
