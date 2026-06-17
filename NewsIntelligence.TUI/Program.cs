@@ -1,4 +1,5 @@
-﻿using Terminal.Gui;
+﻿using NewsIntelligence.TUI.Views;
+using Terminal.Gui;
 
 namespace NewsIntelligence.TUI
 {
@@ -36,23 +37,6 @@ namespace NewsIntelligence.TUI
                 Height = Dim.Fill() - 4
             };
 
-            // ascii logo
-            var asciiLogo = new Label("Logo")
-            {
-              Text = 
-"""
-  d8                                            
-_d88__ 888-~88e  e88~~8e  Y88b    e    /  d88~\ 
- 888   888  888 d888  88b  Y88b  d8b  /  C888   
- 888   888  888 8888__888   Y888/Y88b/    Y88b  
- 888   888  888 Y888    ,    Y8/  Y8/      888D 
- "88_/ 888  888  "88___/      Y    Y     \_88P  
-                                                 
-""",
-                X = Pos.Center(), 
-                Y = Pos.Center()
-            };
-
             // stats panel (below main frame)
             var statsFrame = new FrameView("Stats")
             {
@@ -63,7 +47,6 @@ _d88__ 888-~88e  e88~~8e  Y88b    e    /  d88~\
             };
 
             mainWindow.Add(menuFrame, contentFrame, statsFrame);
-            contentFrame.Add(asciiLogo);
 
             // bottom panel (keybindings n stuff)
             var statusBar = new StatusBar(new StatusItem[] {
@@ -73,6 +56,51 @@ _d88__ 888-~88e  e88~~8e  Y88b    e    /  d88~\
             });
 
             top.Add(mainWindow, statusBar);
+
+            // left menu views
+            var logsView = new LogsView();
+            var sourcesView = new SourcesView();
+            var newsView = new NewsView();
+
+            List<string> leftMenuOptionsList = new()
+            {
+                "NEWS",
+                "SOURCES",
+                "LOGS"
+            };
+
+            ListView myListView = new ListView(leftMenuOptionsList)
+            {
+                Width = Dim.Fill(),
+                Height = Dim.Fill()
+            };
+
+            menuFrame.Add(myListView);
+
+            myListView.SelectedItemChanged += (args) =>
+            {
+                contentFrame.Title = leftMenuOptionsList[args.Item];
+
+                switch (args.Item)
+                {
+                    case 0: // News
+                        contentFrame.RemoveAll();
+                        contentFrame.Add(newsView);
+                        break;
+                    
+                    case 1: // Sources
+                        contentFrame.RemoveAll();
+                        contentFrame.Add(sourcesView);
+                        break;
+                    
+                    case 2: // Logs
+                        contentFrame.RemoveAll();
+                        contentFrame.Add(logsView);
+                        break;
+                }
+
+                contentFrame.SetNeedsDisplay();
+            };
 
             Application.Run();
             Application.Shutdown();
