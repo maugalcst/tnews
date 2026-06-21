@@ -50,55 +50,84 @@ namespace NewsIntelligence.API.Features.Scraper
 
                     foreach (var card in articlesCards)
                     {
-                        var titleLinkNode = card.SelectSingleNode(source.XPathTitle);
-
-                        if (titleLinkNode == null) continue;
-
-                        string articleTitle = titleLinkNode.InnerText.Trim();
-
-                        string articleUrl = titleLinkNode.GetAttributeValue("href", string.Empty);
-
-                        if (string.IsNullOrEmpty(articleUrl)) continue;
-
-                        if (!articleUrl.StartsWith("http"))
+                        try
                         {
-                            articleUrl = $"https://www.{source.Name.ToLower()}.com" + articleUrl;
+                            string articleTitle = "Unknown";
+                            
+                            string articleUrl = "Unknown";
+
+                            var titleLinkNode = card.SelectSingleNode(source.XPathTitle);
+
+                            if (titleLinkNode == null) continue;
+
+                            articleTitle = titleLinkNode.InnerText.Trim();
+
+                            articleUrl = titleLinkNode.GetAttributeValue("href", string.Empty);
+
+                            if (string.IsNullOrEmpty(articleUrl)) continue;
+
+                            if (!Uri.TryCreate(articleUrl, UriKind.Absolute, out _))
+                            {
+                                articleUrl = new Uri(new Uri(source.Url), articleUrl).ToString();
+                            }
+
+                            bool articleUrlExist = await _context.Articles.AnyAsync(a => a.Url == articleUrl);
+
+                            if (articleUrlExist) continue;
+
+                            string articleTextRaw = await GetArticleTextAsync(web, articleUrl, source.XPathContent);
+                            
+                            if (articleTextRaw.Length < 100) continue;
+
+                            string articleContent = await _aiService.GenerateSummaryAsync(articleTextRaw);
+
+                            var article = new Article(
+                                title: articleTitle,
+                                author: "Scraper bot",
+                                content: articleContent,
+                                url: articleUrl,
+                                category: source.Category,
+                                publishedDate: DateTimeOffset.UtcNow,
+                                sourceId: source.Id
+                            );
+
+                            _context.Add(article);
+                            successfulArticlesInThisSource++;
+
+                            System.Console.WriteLine($"[SCRAPER] Processed card: \"{articleTitle}\" -> {articleUrl}");
                         }
-
-                        bool articleUrlExist = await _context.Articles.AnyAsync(a => a.Url == articleUrl);
-
-                        if (articleUrlExist) continue;
-
-                        string articleTextRaw = await GetArticleTextAsync(web, articleUrl, source.XPathContent);
+                        catch (System.Exception e)
+                        {
+                            System.Console.WriteLine($"[ERROR SCRAPER] The processing of {card.Name} failed: {e.Message}");
+                            continue;
+                        }
                         
-                        if (articleTextRaw.Length < 100) continue;
-
-                        string articleContent = await _aiService.GenerateSummaryAsync(articleTextRaw);
-
-                        var article = new Article(
-                            title: articleTitle,
-                            author: "Scraper bot",
-                            content: articleContent,
-                            url: articleUrl,
-                            category: source.Category,
-                            publishedDate: DateTimeOffset.UtcNow,
-                            sourceId: source.Id
-                        );
-
-                        _context.Add(article);
-                        successfulArticlesInThisSource++;
-
-                        System.Console.WriteLine($"[SCRAPER] Processed card: \"{articleTitle}\" -> {articleUrl}");
                     }
 
                     articlesCount = successfulArticlesInThisSource;
-                    status = "Success";
+                    
+                    if (articlesCards.Count == 0) 
+                    {
+                        status = "Empty";
+                    }
+                    else if (successfulArticlesInThisSource == articlesCards.Count) 
+                    {
+                        status = "Success";
+                    }
+                    else if (successfulArticlesInThisSource > 0) 
+                    {
+                        status = "Partial";
+                    }
+                    else 
+                    {
+                        status = "Failed";
+                    }
 
                 } 
                 catch (Exception e)
                 {
                     System.Console.WriteLine($"[ERROR SCRAPER] The processing of {source.Name} failed: {e.Message}");
-                    status = $"Failed: {e.Message}";
+                    continue;
                 }
                 finally
                 {
